@@ -48,20 +48,19 @@ def select_choice():
     count = 0
 
     for index in range(10):
-        if (response.json()[count]["difficulty"]) == user_difficulty.lower():
-            jprint(response.json()[count]["question"]["text"])
+        if (response.json()[index]["difficulty"]) == user_difficulty.lower():
+            jprint(response.json()[index]["question"]["text"])
 
-            example = (response.json()[count]["incorrectAnswers"])
-            example.append(response.json()[count]["correctAnswer"])
+            choice_list = (response.json()[index]["incorrectAnswers"])
+            choice_list.append(response.json()[index]["correctAnswer"])
 
-            random.shuffle(example)
-            print(example)
+            random.shuffle(choice_list)
+            print(choice_list)
 
             answer_choice = input("Select an answer")
 
-            answer_input(answer_choice, example, response.json()[count]["correctAnswer"])
+            answer_input(answer_choice, choice_list, response.json()[count]["correctAnswer"])
 
-            break
         else:
             count += 1
 
@@ -73,14 +72,13 @@ def answer_input(x, y, z):
         print("CORRECT")
         score += 1
         print("Score:", score)
-        select_choice()
+
     else:
         score -= 1
         print("Score:", score)
 
 
 select_choice()
-
 
 #
 # def possible_answers():
@@ -105,5 +103,6 @@ select_choice()
 # if str(x) == y:
 #
 #     print("correct")
+
 
 
