@@ -30,11 +30,14 @@ print(user_difficulty_easy, user_difficulty_medium, user_difficulty_hard)
 user_difficulty = input("")
 
 
-if user_difficulty.upper() == user_difficulty_easy.upper() or user_difficulty_medium.upper() or user_difficulty_hard.upper():
+if user_difficulty.upper() == user_difficulty_easy.upper() or user_difficulty.upper() == user_difficulty_medium.upper() or user_difficulty.upper() == user_difficulty_hard.upper():
 
     print("You've selected:", user_difficulty.lower())
-else:
+
+while user_difficulty.upper() != user_difficulty_easy.upper() and user_difficulty.upper() != user_difficulty_medium.upper() and user_difficulty.upper() != user_difficulty_hard.upper():
     user_difficulty = input("Please select a difficulty provided")
+
+
 
 
 def jprint(obj):
@@ -59,7 +62,10 @@ def select_choice():
 
             answer_choice = input("Select an answer")
 
-            answer_input(answer_choice, choice_list, response.json()[count]["correctAnswer"])
+            answer_input(answer_choice, choice_list, response.json()[index]["correctAnswer"])
+
+        if (response.json()[index]["difficulty"]) != user_difficulty.lower():
+            pass
 
         else:
             count += 1
@@ -70,12 +76,15 @@ def answer_input(x, y, z):
 
     if x == z:
         print("CORRECT")
-        score += 1
-        print("Score:", score)
+        # score += 1
+        # print("Score:", score)
+
 
     else:
-        score -= 1
-        print("Score:", score)
+        print("INCORRECT")
+        print("Correct answer:", z)
+        # score -= 1
+        # print("Score:", score)
 
 
 select_choice()
@@ -83,6 +92,7 @@ select_choice()
 #
 # def possible_answers():
 #     if response.json()[0]["correctAnswer"] ==
+
 
 
 
@@ -103,6 +113,7 @@ select_choice()
 # if str(x) == y:
 #
 #     print("correct")
+
 
 
 
