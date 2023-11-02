@@ -28,6 +28,7 @@ print("")
 print("Choose one:")
 print(user_difficulty_easy, user_difficulty_medium, user_difficulty_hard)
 user_difficulty = input("")
+print("")
 
 
 if user_difficulty.upper() == user_difficulty_easy.upper() or user_difficulty.upper() == user_difficulty_medium.upper() or user_difficulty.upper() == user_difficulty_hard.upper():
@@ -37,6 +38,36 @@ if user_difficulty.upper() == user_difficulty_easy.upper() or user_difficulty.up
 while user_difficulty.upper() != user_difficulty_easy.upper() and user_difficulty.upper() != user_difficulty_medium.upper() and user_difficulty.upper() != user_difficulty_hard.upper():
     user_difficulty = input("Please select a difficulty provided")
 
+categories_question = input("Or would you like to toggle a specific category and view the questions and answers? Y/N")
+
+
+
+def categories_option():
+
+    example = []
+
+    if categories_question == "Y" or categories_question == "y":
+        print("")
+        print("Choose a category:")
+        for index in range(10):
+            example.append(response.json()[index]["category"])
+            if example.count(response.json()[index]["category"]) == 1 and (response.json()[index]["difficulty"]) == user_difficulty.lower():
+                print(response.json()[index]["category"])
+        #     print(response.json()[index]["question"]["text"])
+        category_pick = input("")
+
+        for j in range(10):
+            if category_pick == (response.json()[j]["category"]):
+                print(response.json()[j]["question"]["text"])
+                category_list = (response.json()[j]["incorrectAnswers"])
+                category_list.append(response.json()[j]["correctAnswer"])
+                random.shuffle(category_list)
+                print(category_list)
+            # if categories_question == (response.json()[index]["category"]):
+            #     (jprint(response.json()[index]["question"]))
+
+    if categories_question == "N" or categories_question == "n":
+        select_choice()
 
 
 
@@ -64,9 +95,6 @@ def select_choice():
 
             answer_input(answer_choice, choice_list, response.json()[index]["correctAnswer"])
 
-        if (response.json()[index]["difficulty"]) != user_difficulty.lower():
-            pass
-
         else:
             count += 1
 
@@ -79,7 +107,6 @@ def answer_input(x, y, z):
         # score += 1
         # print("Score:", score)
 
-
     else:
         print("INCORRECT")
         print("Correct answer:", z)
@@ -87,7 +114,8 @@ def answer_input(x, y, z):
         # print("Score:", score)
 
 
-select_choice()
+
+categories_option()
 
 #
 # def possible_answers():
@@ -113,6 +141,7 @@ select_choice()
 # if str(x) == y:
 #
 #     print("correct")
+
 
 
 
