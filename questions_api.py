@@ -8,7 +8,10 @@ def generate_question_pool(question_pool, difficulties, categories):
     Generates a pool of trivia questions by quering the trivia api.
     Iterates over predefined lists of difficulties and categories to fetch questions
 
-    :return: None. Updates 'question_pool' dictionary
+    :param question_pool: A dictionary to store the fetched trivia questions.
+    :param difficulty: String representing the difficulty level of the question
+    :param category: String representing the category of the question
+    :return: None. Updates 'question_pool' dictionary in place
     """
 
     for difficulty in difficulties:
@@ -23,10 +26,12 @@ def refresh_questions(question_pool, difficulty, category):
     """
     Refreshes the question pool for a specific difficulty and category
 
+    :param question_pool: A dictionary to store the fetched trivia questions.
     :param difficulty: String representing the difficulty level of the question
     :param category: String representing the category of the question
-    :return: None. Updates "question_pool" dictionary
+    :return: None. Updates "question_pool" dictionary in place
     """
+
     response = requests.get(
         f"https://the-trivia-api.com/v2/questions?limit=5&difficulties={difficulty}&categories={category}"
     )
