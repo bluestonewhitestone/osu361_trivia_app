@@ -40,6 +40,9 @@ def refresh_questions(question_pool, difficulty, category):
 
 # Main logic
 def main():
+    """
+    TODO: Add random categories and random difficulties
+    """
     context = zmq.Context()
     socket = context.socket(zmq.REP)
     socket.bind("tcp://*:5555")
