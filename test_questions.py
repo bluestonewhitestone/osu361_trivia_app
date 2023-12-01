@@ -4,7 +4,8 @@ import random
 import time
 import zmq
 
-
+another_count = 0
+new_count = 0
 user_welcome = "Welcome to Quizzical Trivia"
 user_difficulty_easy = "Easy"
 user_difficulty_medium = "Medium"
@@ -34,34 +35,37 @@ def introduction():
     time.sleep(1)
     print("uno")
     time.sleep(1)
-    print("dos")
+    print("deux")
     time.sleep(1)
-    print("tres")
+    print("tribus")
     time.sleep(1)
     print("")
     print("")
-
-
-
-
-
 
 
 introduction()
 
-print('\n'.join([", ".join([category for category in categories[i:i + 3]]) for i in range(0, len(categories), 3)]))
-get_category = input("Which category would you like to try?")
-print("")
-print("Easy, Medium, or Hard?")
-get_diff = input("Select a difficulty")
+def ask_cat_diff():
+    print('\n'.join([", ".join([category for category in categories[i:i + 3]]) for i in range(0, len(categories), 3)]))
+    get_category = input("Which category would you like to try?")
+    print("")
+    print("Easy, Medium, or Hard?")
+    get_diff = input("Select a difficulty")
+
+
+# print('\n'.join([", ".join([category for category in categories[i:i + 3]]) for i in range(0, len(categories), 3)]))
+# get_category = input("Which category would you like to try?")
+# print("")
+# print("Easy, Medium, or Hard?")
+# get_diff = input("Select a difficulty")
 
 def complete():
 
-    # print('\n'.join([", ".join([category for category in categories[i:i + 3]]) for i in range(0, len(categories), 3)]))
-    # get_category = input("Which category would you like to try?")
-    # print("")
-    # print("Easy, Medium, or Hard?")
-    # get_diff = input("Select a difficulty")
+    print('\n'.join([", ".join([category for category in categories[i:i + 3]]) for i in range(0, len(categories), 3)]))
+    get_category = input("Which category would you like to try?")
+    print("")
+    print("Easy, Medium, or Hard?")
+    get_diff = input("Select a difficulty")
 
 
     context = zmq.Context()
@@ -125,17 +129,47 @@ def complete():
         if user_input == received["correctAnswer"]:
             print("correct")
             score_count += 1
-        else:
+            score_keeping_plus()
+        if user_input != received["correctAnswer"]:
             print("Incorrect")
-            print(received["correctAnswer"])
+            print("Correct answer:", received["correctAnswer"])
             score_count -= 1
+            score_keeping_minus()
 
 
+    def start_over():
+        user_input_over = input("Would you like to choose a new category and difficulty or Review? Y/N/Review")
+        if user_input_over.lower() == "y":
+            complete()
+        if user_input_over.lower() == "review":
+            display_all()
+
+        if user_input_over.lower() == "n":
+            user_input_complete = input("Would you like to exit program? Y/N")
+            if user_input_complete.lower() == "y":
+                global new_count
+                print("")
+                print("Your final score is:", new_count)
+                exit()
+            if user_input_complete.lower() == "n":
+                start_over()
+
+    def score_keeping_plus():
+        global new_count
+        new_count += 1
+        print("Your current score is: ", new_count)
+
+    def score_keeping_minus():
+        global new_count
+        new_count -= 1
+        print("Your current score is:", new_count)
 
 
     display_all()
     display_questions_answers()
+    start_over()
     complete()
+
 
 complete()
 
