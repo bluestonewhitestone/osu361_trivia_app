@@ -66,7 +66,7 @@ def check_cat_diff(cat, diff):
         print("Please select a valid category")
         print("")
         complete()
-    if diff.lower() != "easy" or "medium" or "hard":
+    if diff.lower() != "easy" and diff.lower() != "medium" and diff.lower() != "hard":
         print("")
         print("Please select Easy, Medium or Hard")
         print("")
@@ -205,5 +205,6 @@ def complete():
 
 
 complete()
+
 
 
