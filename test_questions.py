@@ -28,16 +28,23 @@ print("""
     """)
 
 
+# spanish, english, swedish, french, polish
+one_list = ["uno: Spanish", "one: English", "ett: Swedish", "un: French", "jeden: Polish"]
+two_list = ["dos: Spanish", "two: English", "två: Swedish", "deux: French", "dwa: Polish"]
+three_list = ["tres: Spanish", "three: English", "tre: Swedish", "trois: French", "trzy: Polish"]
+language_list = ["Spanish", "English", "Swedish", "French", "Polish"]
+
+
 def introduction():
     user_name = input("What is your name?")
     print(user_welcome + ", " + user_name)
     print("")
     time.sleep(1)
-    print("uno")
+    print(random.choice(one_list))
     time.sleep(1)
-    print("deux")
+    print(random.choice(two_list))
     time.sleep(1)
-    print("tribus")
+    print(random.choice(three_list))
     time.sleep(1)
     print("")
     print("")
@@ -121,19 +128,16 @@ def complete():
             print(answers_nums)
         answer()
 
-
     def answer():
         score_count = 0
         user_input = input("Choose an answer:")
-
         if user_input == received["correctAnswer"]:
-            print("correct")
-            score_count += 1
+            print("Correct!")
             score_keeping_plus()
+
         if user_input != received["correctAnswer"]:
             print("Incorrect")
             print("Correct answer:", received["correctAnswer"])
-            score_count -= 1
             score_keeping_minus()
 
 
@@ -156,13 +160,32 @@ def complete():
 
     def score_keeping_plus():
         global new_count
-        new_count += 1
+
+        if get_diff.lower() == "easy":
+            new_count += 1
+
+        if get_diff.lower() == "medium":
+            new_count += 2
+
+        if get_diff.lower() == "hard":
+            new_count += 3
+
         print("Your current score is: ", new_count)
 
     def score_keeping_minus():
         global new_count
-        new_count -= 1
-        print("Your current score is:", new_count)
+
+        if get_diff.lower() == "easy":
+            new_count -= 1
+
+        if get_diff.lower() == "medium":
+            new_count -= 2
+
+        if get_diff.lower() == "hard":
+            new_count -= 3
+
+        print("Your current score is: ", new_count)
+
 
 
     display_all()
@@ -172,6 +195,5 @@ def complete():
 
 
 complete()
-
 
 
