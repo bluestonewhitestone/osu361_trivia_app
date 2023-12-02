@@ -32,10 +32,10 @@ print("""
 one_list = ["uno: Spanish", "one: English", "ett: Swedish", "un: French", "jeden: Polish"]
 two_list = ["dos: Spanish", "two: English", "två: Swedish", "deux: French", "dwa: Polish"]
 three_list = ["tres: Spanish", "three: English", "tre: Swedish", "trois: French", "trzy: Polish"]
-language_list = ["Spanish", "English", "Swedish", "French", "Polish"]
 
 
 def introduction():
+    """Introduces user to the program and counts down until program begins"""
     user_name = input("What is your name?")
     print(user_welcome + ", " + user_name)
     print("")
@@ -52,7 +52,8 @@ def introduction():
 
 introduction()
 
-def ask_cat_diff(cat, diff):
+def ask_cat_diff():
+    """Asks user to select which category and difficulty for specific question"""
     print('\n'.join([", ".join([category for category in categories[i:i + 3]]) for i in range(0, len(categories), 3)]))
     cat = input("Which category would you like to try?")
     print("")
@@ -61,6 +62,7 @@ def ask_cat_diff(cat, diff):
 
 
 def check_cat_diff(cat, diff):
+    """Validates user input for category and difficulty"""
     if cat not in categories:
         print("")
         print("Please select a valid category")
@@ -79,28 +81,24 @@ def check_cat_diff(cat, diff):
 # get_diff = input("Select a difficulty")
 
 def complete():
-
+    """Uses microservice to retrieve data from API call"""
     print('\n'.join([", ".join([category for category in categories[i:i + 3]]) for i in range(0, len(categories), 3)]))
     get_category = input("Which category would you like to try?")
     print("")
     print("Easy, Medium, or Hard?")
+    print("Points distribution: Easy = 1, Medium = 2, Hard = 3")
     get_diff = input("Select a difficulty")
 
     check_cat_diff(get_category, get_diff)
-
     context = zmq.Context()
-
     #  Socket to talk to server
     print("Connecting to trivia app server…")
     socket = context.socket(zmq.REQ)
     socket.connect("tcp://localhost:5555")
-
     request = {"request": "getQuestion", "category": f"{get_category}", "difficulty": f"{get_diff}"}
     string_request = json.dumps(request)
     encoded_request = string_request.encode('UTF-8')
-
     socket.send(encoded_request)
-
         #  Get the reply.
     message = socket.recv()
     message_str = message.decode('UTF-8')
@@ -109,7 +107,7 @@ def complete():
     # print(received["question"])
 
     def display_all():
-        category_check = input("Would you like to see the question and answer? Y/N")
+        category_check = input("Would you like to see the question and correct answer? Y/N")
 
         if category_check.lower() == "y":
             print("")
@@ -205,6 +203,9 @@ def complete():
 
 
 complete()
+
+
+
 
 
 
