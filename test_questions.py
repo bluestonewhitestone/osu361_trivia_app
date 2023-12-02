@@ -52,13 +52,25 @@ def introduction():
 
 introduction()
 
-def ask_cat_diff():
+def ask_cat_diff(cat, diff):
     print('\n'.join([", ".join([category for category in categories[i:i + 3]]) for i in range(0, len(categories), 3)]))
-    get_category = input("Which category would you like to try?")
+    cat = input("Which category would you like to try?")
     print("")
     print("Easy, Medium, or Hard?")
-    get_diff = input("Select a difficulty")
+    diff = input("Select a difficulty")
 
+
+def check_cat_diff(cat, diff):
+    if cat not in categories:
+        print("")
+        print("Please select a valid category")
+        print("")
+        complete()
+    if diff.lower() != "easy" or "medium" or "hard":
+        print("")
+        print("Please select Easy, Medium or Hard")
+        print("")
+        complete()
 
 # print('\n'.join([", ".join([category for category in categories[i:i + 3]]) for i in range(0, len(categories), 3)]))
 # get_category = input("Which category would you like to try?")
@@ -74,6 +86,7 @@ def complete():
     print("Easy, Medium, or Hard?")
     get_diff = input("Select a difficulty")
 
+    check_cat_diff(get_category, get_diff)
 
     context = zmq.Context()
 
@@ -95,8 +108,6 @@ def complete():
     # print(received)
     # print(received["question"])
 
-
-
     def display_all():
         category_check = input("Would you like to see the question and answer? Y/N")
 
@@ -113,7 +124,6 @@ def complete():
         elif category_check.lower() != ("y" or "n"):
             print("Please select either Y/N")
             display_all()
-
 
     def display_questions_answers():
         count = 0
@@ -137,7 +147,7 @@ def complete():
 
         if user_input != received["correctAnswer"]:
             print("Incorrect")
-            print("Correct answer:", received["correctAnswer"])
+            # print("Correct answer:", received["correctAnswer"])
             score_keeping_minus()
 
 
