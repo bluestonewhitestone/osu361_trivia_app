@@ -28,7 +28,7 @@ print("""
     """)
 
 
-# spanish, english, swedish, french, polish
+# Lists of spanish, english, swedish, french, and polish words
 one_list = ["uno: Spanish", "one: English", "ett: Swedish", "un: French", "jeden: Polish"]
 two_list = ["dos: Spanish", "two: English", "två: Swedish", "deux: French", "dwa: Polish"]
 three_list = ["tres: Spanish", "three: English", "tre: Swedish", "trois: French", "trzy: Polish"]
@@ -74,22 +74,35 @@ def check_cat_diff(cat, diff):
         print("")
         complete()
 
-# print('\n'.join([", ".join([category for category in categories[i:i + 3]]) for i in range(0, len(categories), 3)]))
-# get_category = input("Which category would you like to try?")
-# print("")
-# print("Easy, Medium, or Hard?")
-# get_diff = input("Select a difficulty")
+
+def random_category(new_category):
+    random_cat_user_input = input("Would you like to choose a random category? Y/N")
+
+    if random_cat_user_input.lower() == "y":
+         new_category = random.choice(categories)
+
+
+
+
+
 
 def complete():
     """Uses microservice to retrieve data from API call"""
+
     print('\n'.join([", ".join([category for category in categories[i:i + 3]]) for i in range(0, len(categories), 3)]))
     get_category = input("Which category would you like to try?")
     print("")
     print("Easy, Medium, or Hard?")
     print("Points distribution: Easy = 1, Medium = 2, Hard = 3")
     get_diff = input("Select a difficulty")
-
     check_cat_diff(get_category, get_diff)
+
+    random_cat_user_input = input("Or would you like to choose a random category? Y/N")
+
+    if random_cat_user_input.lower() == "y":
+        get_category = random.choice(categories)
+
+
     context = zmq.Context()
     #  Socket to talk to server
     print("Connecting to trivia app server…")
@@ -99,14 +112,13 @@ def complete():
     string_request = json.dumps(request)
     encoded_request = string_request.encode('UTF-8')
     socket.send(encoded_request)
-        #  Get the reply.
+    #  Get the reply.
     message = socket.recv()
     message_str = message.decode('UTF-8')
     received = json.loads(message_str)
-    # print(received)
-    # print(received["question"])
 
     def display_all():
+        """Asks user if they want to view the question and correct answer"""
         category_check = input("Would you like to see the question and correct answer? Y/N")
 
         if category_check.lower() == "y":
@@ -119,11 +131,13 @@ def complete():
         elif category_check.lower() == "n":
             print("")
 
-        elif category_check.lower() != ("y" or "n"):
+
+        elif category_check.lower() != "y" and category_check.lower() != "n":
             print("Please select either Y/N")
             display_all()
 
     def display_questions_answers():
+        """If user selects N, display questions and possible answers"""
         count = 0
         print(received["question"]["text"])
         new_list = [received["correctAnswer"]]
@@ -137,6 +151,7 @@ def complete():
         answer()
 
     def answer():
+        """Keeps score based on given answer"""
         score_count = 0
         user_input = input("Choose an answer:")
         if user_input == received["correctAnswer"]:
@@ -150,6 +165,7 @@ def complete():
 
 
     def start_over():
+        """Start over gives the user the ability to keep running the program"""
         user_input_over = input("Would you like to choose a new category and difficulty or Review? Y/N/Review")
         if user_input_over.lower() == "y":
             complete()
@@ -167,6 +183,7 @@ def complete():
                 start_over()
 
     def score_keeping_plus():
+        """Keeps track of score based on difficulty level. Adds to the score."""
         global new_count
 
         if get_diff.lower() == "easy":
@@ -181,6 +198,7 @@ def complete():
         print("Your current score is: ", new_count)
 
     def score_keeping_minus():
+        """If answer is wrong, this function subtracts from score"""
         global new_count
 
         if get_diff.lower() == "easy":
@@ -203,6 +221,7 @@ def complete():
 
 
 complete()
+
 
 
 
