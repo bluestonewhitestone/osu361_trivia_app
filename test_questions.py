@@ -75,15 +75,17 @@ def check_cat_diff(cat, diff):
         complete()
 
 
-def random_category(new_category):
-    random_cat_user_input = input("Would you like to choose a random category? Y/N")
+def random_category_difficulty(new_category, new_difficulty):
+    random_cat_user_input = input("Or would you like to choose a random category? Y/N")
+    random_diff_user_input = input("Or would you like to choose a random difficulty? Y/N")
+    if random_cat_user_input.lower() == "y" and random_diff_user_input.lower() == "y":
+        new_category = random.choice(categories)
+        new_difficulty = random.choice(("easy", "medium", "hard"))
+    if random_cat_user_input.lower() == "n" and random_diff_user_input.lower() == "y":
+        new_difficulty = random.choice(("easy", "medium", "hard"))
 
-    if random_cat_user_input.lower() == "y":
-         new_category = random.choice(categories)
-
-
-
-
+    if random_cat_user_input.lower() == "y" and random_diff_user_input.lower() == "n":
+        new_category = random.choice(categories)
 
 
 def complete():
@@ -97,10 +99,9 @@ def complete():
     get_diff = input("Select a difficulty")
     check_cat_diff(get_category, get_diff)
 
-    random_cat_user_input = input("Or would you like to choose a random category? Y/N")
-
-    if random_cat_user_input.lower() == "y":
-        get_category = random.choice(categories)
+    user_question_input = input("would you like to randomize the categories and difficulty?")
+    if user_question_input.lower() == "y":
+        random_category_difficulty(get_category, get_diff)
 
 
     context = zmq.Context()
@@ -221,6 +222,7 @@ def complete():
 
 
 complete()
+
 
 
 
