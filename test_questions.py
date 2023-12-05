@@ -12,6 +12,7 @@ user_difficulty_medium = "Medium"
 user_difficulty_hard = "Hard"
 categories = ["music", "sport_and_leisure", "film_and_tv", "arts_and_literature", "history", "society_and_culture",
               "science", "geography", "food_and_drink", "general_knowledge"]
+score_list = []
 
 print("""
            .--.                   .---.
@@ -36,7 +37,6 @@ three_list = ["tres: Spanish", "three: English", "tre: Swedish", "trois: French"
 
 def introduction():
     """Introduces user to the program and counts down until program begins"""
-    user_name = input("What is your name?")
     print(user_welcome + ", " + user_name)
     print("")
     time.sleep(1)
@@ -50,7 +50,20 @@ def introduction():
     print("")
 
 
+user_name = input("What is your name?")
 introduction()
+
+
+def high_score_tracker(score_count):
+    to_file = open("high_score.csv", 'a')
+    to_file.write(str(score_count) + "\n")
+    to_file.close()
+
+
+def high_score_update():
+    from_file = open("high_score.csv", 'r')
+    print("The high score is:", max(from_file))
+
 
 def ask_cat_diff():
     """Asks user to select which category and difficulty for specific question"""
@@ -76,8 +89,8 @@ def check_cat_diff(cat, diff):
 
 
 def random_category_difficulty(new_category, new_difficulty):
-    random_cat_user_input = input("Or would you like to choose a random category? Y/N")
-    random_diff_user_input = input("Or would you like to choose a random difficulty? Y/N")
+    random_cat_user_input = input("Would you like to choose a random category? Y/N")
+    random_diff_user_input = input("Would you like to choose a random difficulty? Y/N")
     if random_cat_user_input.lower() == "y" and random_diff_user_input.lower() == "y":
         new_category = random.choice(categories)
         new_difficulty = random.choice(("easy", "medium", "hard"))
@@ -92,17 +105,22 @@ def complete():
     """Uses microservice to retrieve data from API call"""
 
     print('\n'.join([", ".join([category for category in categories[i:i + 3]]) for i in range(0, len(categories), 3)]))
-    get_category = input("Which category would you like to try?")
+    get_category = input("Which category would you like to try?").lower()
     print("")
     print("Easy, Medium, or Hard?")
     print("Points distribution: Easy = 1, Medium = 2, Hard = 3")
-    get_diff = input("Select a difficulty")
+    get_diff = input("Select a difficulty").lower()
     check_cat_diff(get_category, get_diff)
 
-    user_question_input = input("would you like to randomize the categories and difficulty?")
-    if user_question_input.lower() == "y":
-        random_category_difficulty(get_category, get_diff)
-
+    random_cat_user_input = input("Would you like to choose a random category? Y/N")
+    random_diff_user_input = input("Would you like to choose a random difficulty? Y/N")
+    if random_cat_user_input.lower() == "y" and random_diff_user_input.lower() == "y":
+        get_category = random.choice(categories)
+        get_diff = random.choice(("easy", "medium", "hard"))
+    if random_cat_user_input.lower() == "n" and random_diff_user_input.lower() == "y":
+        get_diff = random.choice(("easy", "medium", "hard"))
+    if random_cat_user_input.lower() == "y" and random_diff_user_input.lower() == "n":
+        get_category = random.choice(categories)
 
     context = zmq.Context()
     #  Socket to talk to server
@@ -132,7 +150,6 @@ def complete():
         elif category_check.lower() == "n":
             print("")
 
-
         elif category_check.lower() != "y" and category_check.lower() != "n":
             print("Please select either Y/N")
             display_all()
@@ -161,7 +178,6 @@ def complete():
 
         if user_input != received["correctAnswer"]:
             print("Incorrect")
-            # print("Correct answer:", received["correctAnswer"])
             score_keeping_minus()
 
 
@@ -179,6 +195,8 @@ def complete():
                 global new_count
                 print("")
                 print("Your final score is:", new_count)
+                high_score_tracker(new_count)
+                high_score_update()
                 exit()
             if user_input_complete.lower() == "n":
                 start_over()
@@ -189,13 +207,10 @@ def complete():
 
         if get_diff.lower() == "easy":
             new_count += 1
-
         if get_diff.lower() == "medium":
             new_count += 2
-
         if get_diff.lower() == "hard":
             new_count += 3
-
         print("Your current score is: ", new_count)
 
     def score_keeping_minus():
@@ -204,15 +219,11 @@ def complete():
 
         if get_diff.lower() == "easy":
             new_count -= 1
-
         if get_diff.lower() == "medium":
             new_count -= 2
-
         if get_diff.lower() == "hard":
             new_count -= 3
-
         print("Your current score is: ", new_count)
-
 
 
     display_all()
